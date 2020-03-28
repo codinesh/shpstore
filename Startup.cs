@@ -38,39 +38,39 @@ namespace Groc
             // });
 
             services.AddDbContext<GrocIdentityDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("GrocIdentityDbContextConnectionAzure")));
             services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<GrocIdentityDbContext>();
             services.AddTransient<IdentityUser<int>, GroceriesUser>();
             services.AddRazorPages();
-            services.AddAuthentication()
-            //.AddMicrosoftAccount(microsoftOptions => { ... })
-            .AddGoogle(options =>
-            {
-                IConfigurationSection googleAuthNSection =
-                    Configuration.GetSection("Authentication:Google");
+            // services.AddAuthentication()
+            // //.AddMicrosoftAccount(microsoftOptions => { ... })
+            // .AddGoogle(options =>
+            // {
+            //     IConfigurationSection googleAuthNSection =
+            //         Configuration.GetSection("Authentication:Google");
 
-                options.ClientId = googleAuthNSection["ClientId"];
-                options.ClientSecret = googleAuthNSection["ClientSecret"];
-                options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-                options.SaveTokens = true;
+            //     options.ClientId = googleAuthNSection["ClientId"];
+            //     options.ClientSecret = googleAuthNSection["ClientSecret"];
+            //     options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+            //     options.SaveTokens = true;
 
-                options.Events.OnCreatingTicket = ctx =>
-                {
-                    List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList(); 
+            //     options.Events.OnCreatingTicket = ctx =>
+            //     {
+            //         List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList(); 
 
-                    tokens.Add(new AuthenticationToken()
-                    {
-                        Name = "TicketCreated", 
-                        Value = DateTime.UtcNow.ToString()
-                    });
+            //         tokens.Add(new AuthenticationToken()
+            //         {
+            //             Name = "TicketCreated", 
+            //             Value = DateTime.UtcNow.ToString()
+            //         });
 
-                    ctx.Properties.StoreTokens(tokens);
+            //         ctx.Properties.StoreTokens(tokens);
 
-                    return Task.CompletedTask;
-                };
-            });
+            //         return Task.CompletedTask;
+            //     };
+            // });
             //.AddTwitter(twitterOptions => { ... })
             //.AddFacebook(facebookOptions => { ... });
 
