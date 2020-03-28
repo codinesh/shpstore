@@ -8,12 +8,12 @@ namespace Groc.Models
         public int Id { get; set; }
         
         [DataType(DataType.Date)]
-        public DateTime Created { get; set; }
+        public DateTime CreatedDate { get; set; }
         
         [DataType(DataType.Date)]
-        public DateTime Modified { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int CreatedByUser { get; set; }
 
         public bool IsDeleted { get; set; }
     }

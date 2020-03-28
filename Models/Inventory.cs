@@ -6,9 +6,9 @@ namespace Groc.Models
         public string Name {get;set;}
 
         public float PricePerUnit {get;set;}
-
-        public UnitType UnitType {get;set;}
- 
+         
         public ItemCategory Category {get;set;}
+
+        public string LotSize {get; set;}
     }
 }
