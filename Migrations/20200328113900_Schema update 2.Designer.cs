@@ -3,14 +3,16 @@ using System;
 using Groc.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Groc.Migrations
 {
     [DbContext(typeof(GrocIdentityDbContext))]
-    partial class GrocIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200328113900_Schema update 2")]
+    partial class Schemaupdate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

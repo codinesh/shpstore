@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Groc.Services;
 
 namespace Groc
 {
@@ -40,7 +42,7 @@ namespace Groc
                     Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
             services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<GrocIdentityDbContext>();
-            services.AddTransient<IdentityUser, GroceriesUser>();
+            services.AddTransient<IdentityUser<int>, GroceriesUser>();
             services.AddRazorPages();
             services.AddAuthentication()
             //.AddMicrosoftAccount(microsoftOptions => { ... })
@@ -72,6 +74,12 @@ namespace Groc
             //.AddTwitter(twitterOptions => { ... })
             //.AddFacebook(facebookOptions => { ... });
 
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.AddDbContext<GrocIdentityDbContext>(options =>
+                options.UseSqlite(
+                    Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

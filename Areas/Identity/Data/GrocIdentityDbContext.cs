@@ -3,14 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Groc.Areas.Identity.Data;
+using Groc.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Groc.Areas.Identity.Data
-{
-    public class GrocIdentityDbContext : IdentityDbContext<GroceriesUser>
+{   
+    public class GrocIdentityDbContext : IdentityDbContext<GroceriesUser, IdentityRole<int>, int>
     {
+        public DbSet<Inventory> Items { get; set; }
+    
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderLineItem> OrderLineItem {get;set;}
+
+        public DbSet<UserMap> UserMap { get; set; }
+    
+        public DbSet<Availability> Availability {get;set;}
+
         public GrocIdentityDbContext(DbContextOptions<GrocIdentityDbContext> options)
             : base(options)
         {
