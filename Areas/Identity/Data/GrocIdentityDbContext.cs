@@ -33,6 +33,16 @@ namespace Groc.Areas.Identity.Data
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<IdentityRole>().Property(b => b.Name).HasColumnType("varchar(256)");
+            builder.Entity<IdentityRole>().Property(b => b.NormalizedName).HasColumnType("varchar(256)");
+
+            builder.Entity<GroceriesUser>().Property(b => b.Email).HasColumnType("varchar(256)");
+            builder.Entity<GroceriesUser>().Property(b => b.NormalizedEmail).HasColumnType("varchar(256)");
+            builder.Entity<GroceriesUser>().Property(b => b.NormalizedUserName).HasColumnType("varchar(256)");
+            builder.Entity<GroceriesUser>().Property(b => b.UserName).HasColumnType("varchar(256)");
+            builder.Entity<GroceriesUser>().Property(b => b.Email).HasColumnType("varchar(256)");
+
         }
     }
 }

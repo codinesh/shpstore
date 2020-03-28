@@ -6,11 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Groc.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication;
-using System.Linq;
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Groc.Services;
 
@@ -28,24 +23,15 @@ namespace Groc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // builder.ConfigureServices((context, services) => {
-            //     services.AddDbContext<GrocIdentityDbContext>(options =>
-            //         options.UseSqlServer(
-            //             context.Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
-
-            //     services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //         .AddEntityFrameworkStores<GrocIdentityDbContext>();
-            // });
-
             services.AddDbContext<GrocIdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("GrocIdentityDbContextConnectionAzure")));
+                options.UseSqlite(
+                    Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
             services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<GrocIdentityDbContext>();
             services.AddTransient<IdentityUser<int>, GroceriesUser>();
             services.AddRazorPages();
             // services.AddAuthentication()
-            // //.AddMicrosoftAccount(microsoftOptions => { ... })
+            //.AddMicrosoftAccount(microsoftOptions => { ... })
             // .AddGoogle(options =>
             // {
             //     IConfigurationSection googleAuthNSection =
@@ -76,10 +62,6 @@ namespace Groc
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
-
-            services.AddDbContext<GrocIdentityDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
