@@ -4,3 +4,7 @@ webappname=sphstore
 
 az webapp deployment source config --name $webappname --resource-group Default-SQL-SoutheastAsia \
 --repo-url $gitrepo --branch master --manual-integration
+
+
+
+dotnet aspnet-codegenerator razorpage -m OrderViewModel -dc Groc.Areas.Identity.Data.GrocIdentityDbContext -udl -outDir Areas/Orders/ --referenceScriptLibraries

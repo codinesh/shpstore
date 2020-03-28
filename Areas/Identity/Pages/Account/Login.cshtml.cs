@@ -17,7 +17,7 @@ namespace Groc.Areas.Identity.Pages.Account
         private readonly SignInManager<GroceriesUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<GroceriesUser> signInManager, 
+        public LoginModel(SignInManager<GroceriesUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<GroceriesUser> userManager)
         {
