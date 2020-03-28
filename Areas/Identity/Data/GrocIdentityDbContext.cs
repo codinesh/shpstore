@@ -7,6 +7,7 @@ using Groc.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Groc.Models.ViewModels.Order;
 
 namespace Groc.Areas.Identity.Data
 {   
@@ -44,5 +45,7 @@ namespace Groc.Areas.Identity.Data
             builder.Entity<GroceriesUser>().Property(b => b.Email).HasColumnType("varchar(256)");
 
         }
+
+        public DbSet<Groc.Models.ViewModels.Order.OrderViewModel> OrderViewModel { get; set; }
     }
 }
