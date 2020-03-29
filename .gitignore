@@ -2,6 +2,6 @@ bin
 obj
 *.db
 publish
-*.db
 .vscode
 GrocDb.db
+/.vs

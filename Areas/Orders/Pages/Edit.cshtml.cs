@@ -23,7 +23,7 @@ namespace Groc.Areas.Orders
         }
 
         [BindProperty]
-        public Order Order { get; set; }
+        public OrderHeader Order { get; set; }
 
         [BindProperty]
         public OrderLineItem NewLineItem { get; set; }
