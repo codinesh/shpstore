@@ -200,6 +200,9 @@ namespace Groc.Migrations
                     b.Property<float>("OrderTotal")
                         .HasColumnType("REAL");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 

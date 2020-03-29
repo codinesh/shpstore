@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Groc.Areas.Orders
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;
@@ -64,18 +66,21 @@ namespace Groc.Areas.Orders
                 return Page();
             }
 
-            var orderFromDb = await _context.Order.Include(oi => oi.OrderLineItem)
+            var orderFromDb = await _context.Order
+                .Include(oi => oi.OrderLineItem)
                 .FirstOrDefaultAsync(x => x.Id == Order.Id);
-
+            var inventoryItem = await _context.Inventory.FirstOrDefaultAsync(i => i.Id == NewLineItem.ItemId);
             var existingLineItem = (orderFromDb.OrderLineItem.FirstOrDefault(x => x.ItemId == NewLineItem.ItemId));
             if (existingLineItem == null)
             {
                 NewLineItem.OrderId = orderFromDb.Id;
+                NewLineItem.Price = NewLineItem.ItemQuantity * inventoryItem.PricePerUnit;
                 orderFromDb.OrderLineItem.Add(NewLineItem);
             }
             else
             {
                 existingLineItem.ItemQuantity += NewLineItem.ItemQuantity;
+                existingLineItem.Price = existingLineItem.ItemQuantity * inventoryItem.PricePerUnit;
             }
 
             try

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Groc.Areas.Orders
 {
+    [Authorize]
     public class DetailsModel : PageModel
     {
         private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;

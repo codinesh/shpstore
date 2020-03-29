@@ -233,7 +233,8 @@ namespace Groc.Migrations
                     CreatedBy = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
-                    OrderTotal = table.Column<float>(nullable: false)
+                    OrderTotal = table.Column<float>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

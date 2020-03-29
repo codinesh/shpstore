@@ -26,7 +26,7 @@ namespace Groc
             services.AddDbContext<GrocIdentityDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
-            services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<GrocIdentityDbContext>();
             services.AddTransient<IdentityUser<int>, GroceriesUser>();
             services.AddRazorPages();
@@ -44,11 +44,11 @@ namespace Groc
 
             //     options.Events.OnCreatingTicket = ctx =>
             //     {
-            //         List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList(); 
+            //         List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
 
             //         tokens.Add(new AuthenticationToken()
             //         {
-            //             Name = "TicketCreated", 
+            //             Name = "TicketCreated",
             //             Value = DateTime.UtcNow.ToString()
             //         });
 
