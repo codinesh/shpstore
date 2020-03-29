@@ -21,7 +21,7 @@ namespace Groc.Areas.Orders
             _context = context;
         }
 
-        public IList<Order> Order { get; set; }
+        public IList<OrderHeader> Order { get; set; }
 
         public async Task OnGetAsync()
         {

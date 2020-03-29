@@ -22,7 +22,7 @@ namespace Groc.Areas.Orders
         }
 
         [BindProperty]
-        public Order Order { get; set; }
+        public OrderHeader Order { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

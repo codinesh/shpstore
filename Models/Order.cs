@@ -4,7 +4,7 @@ using Groc.Areas.Identity.Data;
 
 namespace Groc.Models
 {
-    public class Order : BaseModel
+    public class OrderHeader : BaseModel
     {
         public int UserId { get; set; }
 

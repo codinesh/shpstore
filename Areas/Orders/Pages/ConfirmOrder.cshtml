@@ -29,10 +29,10 @@
             @Html.DisplayFor(model => model.Order.OrderTotal)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Order.Created)
+            @Html.DisplayNameFor(model => model.Order.CreatedDate)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Order.Created)
+            @Html.DisplayFor(model => model.Order.CreatedDate)
         </dd>
     </dl>
 </div>
@@ -74,7 +74,7 @@
 
 <div>
     <form method="post">
-        <input class="btn btn-primary" type="submit" value="Place Order" />
+        <input class="btn btn-primary" type="submit" value="Submit Order" />
     </form>
 </div>
 

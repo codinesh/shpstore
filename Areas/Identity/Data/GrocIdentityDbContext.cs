@@ -15,7 +15,7 @@ namespace Groc.Areas.Identity.Data
     {
         public DbSet<Inventory> Inventory { get; set; }
 
-        public DbSet<Order> Order { get; set; }
+        public DbSet<OrderHeader> Order { get; set; }
 
         public DbSet<OrderLineItem> OrderLineItem { get; set; }
 
