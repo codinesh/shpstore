@@ -24,7 +24,7 @@ namespace Groc.Areas.Orders
             _userManager = userManager;
         }
 
-        public IList<Order> Order { get; set; }
+        public IList<OrderHeader> Order { get; set; }
 
         public async Task OnGetAsync()
         {
