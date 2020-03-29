@@ -29,7 +29,7 @@ namespace Groc.Areas.Orders
                 return NotFound();
             }
 
-            Order = await _context.Orders
+            Order = await _context.Order
                 .Include(o => o.User).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Order == null)
@@ -46,11 +46,11 @@ namespace Groc.Areas.Orders
                 return NotFound();
             }
 
-            Order = await _context.Orders.FindAsync(id);
+            Order = await _context.Order.FindAsync(id);
 
             if (Order != null)
             {
-                _context.Orders.Remove(Order);
+                _context.Order.Remove(Order);
                 await _context.SaveChangesAsync();
             }
 

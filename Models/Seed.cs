@@ -16,7 +16,7 @@ namespace RazorPagesItem.Models
                     DbContextOptions<GrocIdentityDbContext>>()))
             {
                 // Look for any Items.
-                if (context.Items.Any())
+                if (context.Inventory.Any())
                 {
                     return;   // DB has been seeded
                 }
@@ -75,13 +75,13 @@ namespace RazorPagesItem.Models
                 context.UserMap.AddRange(
                     new UserMap
                     {
-                        VillaNumber = 127, 
+                        VillaNumber = 127,
                         PhoneNumber = "9493370092",
                         Email = "codinesh@live.com"
                     },
                     new UserMap
                     {
-                        VillaNumber = 170, 
+                        VillaNumber = 170,
                         PhoneNumber = "9908635000",
                         Email = "vemunoori@gmail.com"
                     }

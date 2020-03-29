@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Groc.Areas.Orders
 {
@@ -21,7 +22,6 @@ namespace Groc.Areas.Orders
 
         public IActionResult OnGet()
         {
-        ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return Page();
         }
 
@@ -36,11 +36,15 @@ namespace Groc.Areas.Orders
             {
                 return Page();
             }
-
-            _context.Orders.Add(Order);
+            Order.UserId = 1;
+            Order.Created = DateTime.UtcNow;
+            Order.CreatedBy = Order.UserId;
+            _context.Order.Add(Order);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            var latestOrder = await _context.Order.OrderByDescending(x => x.Id).FirstOrDefaultAsync(x => x.UserId == Order.UserId);
+
+            return RedirectToPage("Edit", new { latestOrder.Id });
         }
     }
 }

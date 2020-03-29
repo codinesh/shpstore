@@ -10,18 +10,18 @@ using Microsoft.EntityFrameworkCore;
 using Groc.Models.ViewModels.Order;
 
 namespace Groc.Areas.Identity.Data
-{   
+{
     public class GrocIdentityDbContext : IdentityDbContext<GroceriesUser, IdentityRole<int>, int>
     {
-        public DbSet<Inventory> Items { get; set; }
-    
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
 
-        public DbSet<OrderLineItem> OrderLineItem {get;set;}
+        public DbSet<Order> Order { get; set; }
+
+        public DbSet<OrderLineItem> OrderLineItem { get; set; }
 
         public DbSet<UserMap> UserMap { get; set; }
-    
-        public DbSet<Availability> Availability {get;set;}
+
+        public DbSet<Availability> Availability { get; set; }
 
         public GrocIdentityDbContext(DbContextOptions<GrocIdentityDbContext> options)
             : base(options)

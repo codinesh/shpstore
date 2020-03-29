@@ -19,11 +19,11 @@ namespace Groc.Areas.Orders
             _context = context;
         }
 
-        public IList<Order> Order { get;set; }
+        public IList<Order> Order { get; set; }
 
         public async Task OnGetAsync()
         {
-            Order = await _context.Orders
+            Order = await _context.Order
                 .Include(o => o.User).ToListAsync();
         }
     }
