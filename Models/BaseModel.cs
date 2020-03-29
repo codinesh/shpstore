@@ -5,7 +5,7 @@ namespace Groc.Models
 {
     public class BaseModel
     {
-        [Display(Name = "Hello")]
+        [Display(Name = "Id")]
         public int Id { get; set; }
 
         [DataType(DataType.Date)]

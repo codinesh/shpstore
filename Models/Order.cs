@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Groc.Areas.Identity.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace Groc.Models
 {
@@ -14,6 +15,7 @@ namespace Groc.Models
 
         public float OrderTotal { get; set; }
 
+        [Display(Name = "OrderStatus")]
         public OrderStatus Status { get; set; }
     }
 }
