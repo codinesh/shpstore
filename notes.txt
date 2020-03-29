@@ -8,3 +8,6 @@ az webapp deployment source config --name $webappname --resource-group Default-S
 
 
 dotnet aspnet-codegenerator razorpage -m OrderViewModel -dc Groc.Areas.Identity.Data.GrocIdentityDbContext -udl -outDir Areas/Orders/ --referenceScriptLibraries
+
+
+dotnet publish -c Release -o ./publish
