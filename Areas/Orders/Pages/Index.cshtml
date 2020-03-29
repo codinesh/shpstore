@@ -23,7 +23,7 @@
                 @Html.DisplayNameFor(model => model.Order[0].OrderTotal)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Order[0].Created)
+                @Html.DisplayNameFor(model => model.Order[0].CreatedDate)
             </th>
             <th></th>
         </tr>
@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.OrderTotal)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Created)
+                @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

@@ -37,8 +37,8 @@ namespace Groc.Areas.Orders
                 return Page();
             }
             Order.UserId = 1;
-            Order.Created = DateTime.UtcNow;
-            Order.CreatedBy = Order.UserId;
+            Order.CreatedDate = DateTime.UtcNow;
+            Order.CreatedByUser = Order.UserId;
             _context.Order.Add(Order);
             await _context.SaveChangesAsync();
 
