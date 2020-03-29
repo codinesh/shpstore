@@ -78,7 +78,7 @@ namespace Groc.Areas.Identity.Pages.Account
             public string PhoneNumber { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public void OnGet(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
         }
