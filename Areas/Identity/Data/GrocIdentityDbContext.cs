@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Groc.Areas.Identity.Data;
 using Groc.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Groc.Models.ViewModels.Order;
 
 namespace Groc.Areas.Identity.Data
 {
@@ -35,17 +29,14 @@ namespace Groc.Areas.Identity.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
-            builder.Entity<IdentityRole>().Property(b => b.Name).HasColumnType("varchar(256)");
-            builder.Entity<IdentityRole>().Property(b => b.NormalizedName).HasColumnType("varchar(256)");
+            builder.Entity<IdentityRole<int>>().Property(b => b.Name).HasColumnType("varchar(256)");
+            builder.Entity<IdentityRole<int>>().Property(b => b.NormalizedName).HasColumnType("varchar(256)");
 
             builder.Entity<GroceriesUser>().Property(b => b.Email).HasColumnType("varchar(256)");
             builder.Entity<GroceriesUser>().Property(b => b.NormalizedEmail).HasColumnType("varchar(256)");
             builder.Entity<GroceriesUser>().Property(b => b.NormalizedUserName).HasColumnType("varchar(256)");
             builder.Entity<GroceriesUser>().Property(b => b.UserName).HasColumnType("varchar(256)");
             builder.Entity<GroceriesUser>().Property(b => b.Email).HasColumnType("varchar(256)");
-
         }
-
-        public DbSet<Groc.Models.ViewModels.Order.OrderViewModel> OrderViewModel { get; set; }
     }
 }

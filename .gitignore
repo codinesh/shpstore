@@ -1,4 +1,7 @@
 bin
 obj
 *.db
+publish
+.vscode
+GrocDb.db
 /.vs
