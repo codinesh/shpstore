@@ -5,7 +5,15 @@
     ViewData["Title"] = "Create";
 }
 
-<h4>Review and confirm Order</h4>
+@if(@Model.DetailsMode)
+{
+    <h4>Order details</h4>
+}
+else
+{
+    <h4>Review and confirm Order</h4>
+}
+
 <hr />
 
 <div class="container">
@@ -72,12 +80,15 @@
     </div>
 </div>
 
-<div>
-    <form method="post">
-        <input class="btn btn-primary" type="submit" value="Submit Order" />
-    </form>
-</div>
+@if(!@Model.DetailsMode)
+{
+    <div>
+        <form method="post">
+            <input class="btn btn-primary" type="submit" value="Submit Order" />
+        </form>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
 }

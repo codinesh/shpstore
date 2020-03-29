@@ -30,6 +30,8 @@ namespace Groc.Areas.Orders
 
         public List<OrderLineItem> LineItems { get; set; }
 
+        public bool DetailsMode { get; set; }
+
         public string UserName { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -51,6 +53,7 @@ namespace Groc.Areas.Orders
             UserName = user.Name;
             LineItems = Order.OrderLineItem ?? new List<OrderLineItem>();
             Order.OrderTotal = Order.OrderLineItem.Sum(x => x.Price);
+            DetailsMode = Order.Status != OrderStatus.InProgress;
             return Page();
         }
 
