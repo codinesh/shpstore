@@ -9,6 +9,12 @@ namespace Groc.Models
 
         FoodAndNutrition,
 
+        BeautyAndGrooming,
+
+        FrozenFoods,
+
+        Dairy, 
+
         Medical
     }
 }
