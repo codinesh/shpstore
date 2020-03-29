@@ -6,12 +6,14 @@ namespace Groc.Models
 {
     public class Order : BaseModel
     {
-        public int UserId {get;set;}
+        public int UserId { get; set; }
 
-        public virtual GroceriesUser User {get;set;}
+        public virtual GroceriesUser User { get; set; }
 
-        public virtual List<OrderLineItem> OrderLineItem {get;set;}
- 
-        public float OrderTotal {get;set;}
+        public virtual List<OrderLineItem> OrderLineItem { get; set; }
+
+        public float OrderTotal { get; set; }
+
+        public OrderStatus Status { get; set; }
     }
 }

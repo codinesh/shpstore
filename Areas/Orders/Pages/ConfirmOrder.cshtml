@@ -1,0 +1,83 @@
+@page
+@model Groc.Areas.Orders.ConfirmOrderModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Review and confirm Order</h4>
+<hr />
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.Label("PO Number")
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.User)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.User.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.OrderTotal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.OrderTotal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.Created)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Created)
+        </dd>
+    </dl>
+</div>
+
+<div class="container">
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LineItems[0].Item.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LineItems[0].ItemQuantity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LineItems[0].Price)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model.LineItems) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <form method="post">
+        <input class="btn btn-primary" type="submit" value="Place Order" />
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

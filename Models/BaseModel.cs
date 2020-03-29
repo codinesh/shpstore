@@ -6,10 +6,10 @@ namespace Groc.Models
     public class BaseModel
     {
         public int Id { get; set; }
-        
+
         [DataType(DataType.Date)]
         public DateTime Created { get; set; }
-        
+
         [DataType(DataType.Date)]
         public DateTime Modified { get; set; }
 

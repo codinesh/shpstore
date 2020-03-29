@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Groc.Migrations
 {
     [DbContext(typeof(GrocIdentityDbContext))]
-    [Migration("20200329080028_Initial")]
+    [Migration("20200329113800_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,6 +201,9 @@ namespace Groc.Migrations
 
                     b.Property<float>("OrderTotal")
                         .HasColumnType("REAL");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");

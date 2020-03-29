@@ -8,16 +8,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Groc.Areas.Orders
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
-        private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;
+        private readonly GrocIdentityDbContext _context;
+        private readonly UserManager<GroceriesUser> _userManager;
 
-        public CreateModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context)
+        public CreateModel(GrocIdentityDbContext context,
+                           UserManager<GroceriesUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult OnGet()
@@ -36,7 +42,8 @@ namespace Groc.Areas.Orders
             {
                 return Page();
             }
-            Order.UserId = 1;
+            Order.User = await _userManager.GetUserAsync(User);
+            Order.UserId = Order.User.Id;
             Order.Created = DateTime.UtcNow;
             Order.CreatedBy = Order.UserId;
             _context.Order.Add(Order);
