@@ -23,6 +23,12 @@ namespace Groc.Areas.Orders
         [BindProperty]
         public Order Order { get; set; }
 
+        [BindProperty]
+        public OrderLineItem NewLineItem { get; set; }
+
+        public List<OrderLineItem> LineItems { get; set; }
+        public SelectList AvailableInventory { get; private set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -30,14 +36,22 @@ namespace Groc.Areas.Orders
                 return NotFound();
             }
 
-            Order = await _context.Orders
-                .Include(o => o.User).FirstOrDefaultAsync(m => m.Id == id);
+            Order = await _context.Order
+                .Include(o => o.OrderLineItem)
+                .FirstOrDefaultAsync(m => m.Id == id && !m.IsDeleted);
 
             if (Order == null)
             {
                 return NotFound();
             }
-           ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+
+            LineItems = Order.OrderLineItem ?? new List<OrderLineItem>();
+            var availableInventoryQuery = from d in _context.Inventory
+                                          orderby d.Name // Sort by name.
+                                          select d;
+            var list = availableInventoryQuery.ToList();
+            ViewData["AvailableInventory"] = new SelectList(availableInventoryQuery.AsNoTracking(),
+                        "Id", "Name");
             return Page();
         }
 
@@ -50,7 +64,19 @@ namespace Groc.Areas.Orders
                 return Page();
             }
 
-            _context.Attach(Order).State = EntityState.Modified;
+            var orderFromDb = await _context.Order.Include(oi => oi.OrderLineItem)
+                .FirstOrDefaultAsync(x => x.Id == Order.Id);
+
+            var existingLineItem = (orderFromDb.OrderLineItem.FirstOrDefault(x => x.ItemId == NewLineItem.ItemId));
+            if (existingLineItem == null)
+            {
+                NewLineItem.OrderId = orderFromDb.Id;
+                orderFromDb.OrderLineItem.Add(NewLineItem);
+            }
+            else
+            {
+                existingLineItem.ItemQuantity += NewLineItem.ItemQuantity;
+            }
 
             try
             {
@@ -68,12 +94,12 @@ namespace Groc.Areas.Orders
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("Edit", new { Order.Id });
         }
 
         private bool OrderExists(int id)
         {
-            return _context.Orders.Any(e => e.Id == id);
+            return _context.Order.Any(e => e.Id == id);
         }
     }
 }

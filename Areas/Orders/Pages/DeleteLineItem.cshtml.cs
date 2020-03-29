@@ -10,32 +10,38 @@ using Groc.Models;
 
 namespace Groc.Areas.Orders
 {
-    public class DetailsModel : PageModel
+    public class DeleteLineItemModel : PageModel
     {
         private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;
 
-        public DetailsModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context)
+        public DeleteLineItemModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context)
         {
             _context = context;
         }
 
+        [BindProperty]
         public Order Order { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public void OnGet(int? id)
+        {
+        }
+
+        public async Task<IActionResult> OnPostAsync(int? orderId, int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Order = await _context.Order
-                .Include(o => o.User).FirstOrDefaultAsync(m => m.Id == id);
+            Order = await _context.Order.FindAsync(id);
 
-            if (Order == null)
+            if (Order != null)
             {
-                return NotFound();
+                _context.Order.Remove(Order);
+                await _context.SaveChangesAsync();
             }
-            return Page();
+
+            return RedirectToPage("./Index");
         }
     }
 }
