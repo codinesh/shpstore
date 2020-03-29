@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Groc.Areas.Orders
 {
@@ -15,18 +16,23 @@ namespace Groc.Areas.Orders
     public class IndexModel : PageModel
     {
         private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;
+        private readonly UserManager<GroceriesUser> _userManager;
 
-        public IndexModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context)
+        public IndexModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context, UserManager<GroceriesUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IList<Order> Order { get; set; }
 
         public async Task OnGetAsync()
         {
+            var user = await _userManager.GetUserAsync(User);
             Order = await _context.Order
-                .Include(o => o.User).ToListAsync();
+                .Include(o => o.User)
+                .Where(x => x.UserId == user.Id && !x.IsDeleted)
+                .ToListAsync();
         }
     }
 }
