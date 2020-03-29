@@ -64,7 +64,7 @@ namespace Groc.Areas.Orders
             }
 
             var orderFromDb = await _context.Order.FirstOrDefaultAsync(x => x.Id == Order.Id);
-            orderFromDb.Status = OrderStatus.Processing;
+            orderFromDb.Status = OrderStatus.PendingPayment;
             await _context.SaveChangesAsync();
             return RedirectToPage("Index");
         }

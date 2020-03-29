@@ -2,8 +2,7 @@ namespace Groc.Models
 {
     public enum OrderStatus
     {
-        Creating,
-        Processing,
+        InProgress,
         PendingPayment,
         ReceivedPayment,
         PendingFulfillment,

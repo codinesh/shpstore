@@ -24,8 +24,8 @@ namespace Groc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<GrocIdentityDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("GrocIdentityDbContextConnectionAzure")));
             services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<GrocIdentityDbContext>();
             services.AddTransient<IdentityUser<int>, GroceriesUser>();
