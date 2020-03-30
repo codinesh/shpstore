@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Groc.Pages.Shared;
+using Groc.AuthorizationHandlers;
 
 namespace Groc.Areas.Orders
 {
-    [Authorize]
-    public class ConfirmOrderModel : PageModel
-    {
-        private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;
-        private readonly UserManager<GroceriesUser> _userManager;
 
-        public ConfirmOrderModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context, UserManager<GroceriesUser> userManager)
+    [Authorize]
+    public class ConfirmOrderModel : BasePageModel
+    {
+        public ConfirmOrderModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context,
+                UserManager<GroceriesUser> userManager,
+                IAuthorizationService authService) : base(context, userManager, authService)
         {
-            _context = context;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -49,7 +48,15 @@ namespace Groc.Areas.Orders
             {
                 return NotFound();
             }
+
+            if (!(await _authorizationService.AuthorizeAsync(User, UserId, Constants.CreateOperationName)).Succeeded)
+            {
+                return Forbid();
+            }
+
             var user = await _userManager.GetUserAsync(User);
+
+
             UserName = user.Name;
             LineItems = Order.OrderLineItem ?? new List<OrderLineItem>();
             Order.OrderTotal = Order.OrderLineItem.Sum(x => x.Price);

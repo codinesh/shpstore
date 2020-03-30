@@ -23,11 +23,17 @@ namespace Groc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<GrocIdentityDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("GrocIdentityDbContextConnectionAzure")));
+
             services.AddDbContext<GrocIdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("GrocIdentityDbContextConnectionAzure")));
+            options.UseSqlite(
+                    Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
+            
             services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<GrocIdentityDbContext>();
+            
             services.AddTransient<IdentityUser<int>, GroceriesUser>();
             services.AddRazorPages();
             // services.AddAuthentication()
