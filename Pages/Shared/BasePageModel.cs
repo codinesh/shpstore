@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Groc.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Groc.Pages.Shared
 {
@@ -11,8 +12,6 @@ namespace Groc.Pages.Shared
         public readonly UserManager<GroceriesUser> _userManager;
         public IAuthorizationService _authorizationService;
 
-        public string UserId { get; private set; }
-
         public BasePageModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context,
                 UserManager<GroceriesUser> userManager,
                 IAuthorizationService authService)
@@ -20,7 +19,8 @@ namespace Groc.Pages.Shared
             _context = context;
             _userManager = userManager;
             _authorizationService = authService;
-            UserId = _userManager.GetUserId(User);
         }
+
+        public async Task<GroceriesUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(User);
     }
 }

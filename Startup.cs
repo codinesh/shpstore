@@ -8,14 +8,20 @@ using Groc.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Groc.Services;
+using Groc.AuthorizationHandlers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace Groc
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -23,19 +29,33 @@ namespace Groc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<GrocIdentityDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("GrocIdentityDbContextConnectionAzure")));
+            if (env.IsProduction())
+            {
+                services.AddDbContext<GrocIdentityDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("GrocIdentityDbContextConnectionAzure")));
+            }
+            else if (env.IsDevelopment())
+            {
+                services.AddDbContext<GrocIdentityDbContext>(options =>
+                options.UseSqlite(
+                        Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
+            }
 
-            services.AddDbContext<GrocIdentityDbContext>(options =>
-            options.UseSqlite(
-                    Configuration.GetConnectionString("GrocIdentityDbContextConnection")));
-            
             services.AddDefaultIdentity<GroceriesUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<GrocIdentityDbContext>();
-            
+
             services.AddTransient<IdentityUser<int>, GroceriesUser>();
             services.AddRazorPages();
+
+            services.AddControllers(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
             // services.AddAuthentication()
             //.AddMicrosoftAccount(microsoftOptions => { ... })
             // .AddGoogle(options =>
@@ -68,6 +88,9 @@ namespace Groc
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.AddScoped<IAuthorizationHandler, UserAuthHandler>();
+            services.AddSingleton<IAuthorizationHandler, AdminAuthHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,7 +103,7 @@ namespace Groc
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

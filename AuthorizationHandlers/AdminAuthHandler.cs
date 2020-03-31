@@ -22,10 +22,6 @@ namespace Groc.AuthorizationHandlers
             {
                 context.Succeed(requirement);
             }
-            else
-            {
-                context.Fail();
-            }
 
             return Task.CompletedTask;
         }

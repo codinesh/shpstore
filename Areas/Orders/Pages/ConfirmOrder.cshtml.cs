@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
 using Microsoft.EntityFrameworkCore;
@@ -49,14 +47,13 @@ namespace Groc.Areas.Orders
                 return NotFound();
             }
 
-            if (!(await _authorizationService.AuthorizeAsync(User, UserId, Constants.CreateOperationName)).Succeeded)
+            var result = await _authorizationService.AuthorizeAsync(User, Order.UserId, OperationRequirements.Create);
+            if (!result.Succeeded)
             {
                 return Forbid();
             }
 
-            var user = await _userManager.GetUserAsync(User);
-
-
+            var user = await GetCurrentUserAsync();
             UserName = user.Name;
             LineItems = Order.OrderLineItem ?? new List<OrderLineItem>();
             Order.OrderTotal = Order.OrderLineItem.Sum(x => x.Price);
@@ -74,6 +71,18 @@ namespace Groc.Areas.Orders
             }
 
             var orderFromDb = await _context.Order.FirstOrDefaultAsync(x => x.Id == Order.Id);
+
+            if (orderFromDb == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _authorizationService.AuthorizeAsync(User, orderFromDb.UserId, OperationRequirements.Create);
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
+
             orderFromDb.Status = OrderStatus.PendingPayment;
             await _context.SaveChangesAsync();
             return RedirectToPage("Index");
