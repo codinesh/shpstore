@@ -9,17 +9,18 @@ using Microsoft.EntityFrameworkCore;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
 using Microsoft.AspNetCore.Authorization;
+using Groc.Pages.Shared;
+using Microsoft.AspNetCore.Identity;
 
 namespace Groc.Areas.Orders
 {
     [Authorize]
-    public class EditModel : PageModel
+    public class EditModel : BasePageModel
     {
-        private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;
-
-        public EditModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context)
+        public EditModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context,
+                 UserManager<GroceriesUser> userManager,
+                 IAuthorizationService authService) : base(context, userManager, authService)
         {
-            _context = context;
         }
 
         [BindProperty]

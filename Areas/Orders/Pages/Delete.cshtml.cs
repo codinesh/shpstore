@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Groc.Areas.Identity.Data;
 using Groc.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Groc.Pages.Shared;
 
 namespace Groc.Areas.Orders
 {
     [Authorize]
-    public class DeleteModel : PageModel
+    public class DeleteModel : BasePageModel
     {
-        private readonly Groc.Areas.Identity.Data.GrocIdentityDbContext _context;
-
-        public DeleteModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context)
+        public DeleteModel(Groc.Areas.Identity.Data.GrocIdentityDbContext context,
+                UserManager<GroceriesUser> userManager,
+                IAuthorizationService authService) : base(context, userManager, authService)
         {
-            _context = context;
         }
 
         [BindProperty]
@@ -38,6 +35,13 @@ namespace Groc.Areas.Orders
             {
                 return NotFound();
             }
+
+            var result = await _authorizationService.AuthorizeAsync(User, Order.UserId, OperationRequirements.Create);
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
+
             return Page();
         }
 
