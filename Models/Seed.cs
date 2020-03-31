@@ -1,20 +1,43 @@
 using Groc.Areas.Identity.Data;
+using Groc.AuthorizationHandlers;
 using Groc.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RazorPagesItem.Models
 {
     public static class SeedData
     {
-        public static void Initialize(IServiceProvider serviceProvider)
+        public static async Task InitializeAsync(IServiceProvider serviceProvider)
         {
             using (var context = new GrocIdentityDbContext(
                 serviceProvider.GetRequiredService<
                     DbContextOptions<GrocIdentityDbContext>>()))
             {
+
+                var passd = "HelloWorld@1";
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Email == "vemunoori@hotmail.com");
+                var userId = user?.Id ?? 0;
+                if (user == null)
+                {
+                    userId = await EnsureUser(serviceProvider, "Naveen V", "", 170, passd, "vemunoori@hotmail.com");
+                }
+
+                await EnsureRole(serviceProvider, userId, Constants.AdministratorsRole);
+
+                user = await context.Users.FirstOrDefaultAsync(u => u.Email == "codinesh@live.com");
+                userId = user?.Id ?? 0;
+                if (user == null)
+                {
+                    userId = await EnsureUser(serviceProvider, "Dinesh", "", 127, passd, "codinesh@live.com");
+                }
+
+                await EnsureRole(serviceProvider, userId, Constants.AdministratorsRole);
+
                 // Look for any Items.
                 if (context.Inventory.Any())
                 {
@@ -90,6 +113,63 @@ namespace RazorPagesItem.Models
 
                 context.SaveChanges();
             }
+        }
+
+        private static async Task<int> EnsureUser(IServiceProvider serviceProvider,
+                              string name, string phoneNumber, int villaNumber, string testUserPw, string UserName)
+        {
+            var userManager = serviceProvider.GetService<UserManager<GroceriesUser>>();
+
+            var user = await userManager.FindByNameAsync(UserName);
+            if (user == null)
+            {
+                user = new GroceriesUser
+                {
+                    UserName = UserName,
+                    Name = name,
+                    VillaNumber = villaNumber,
+                    PhoneNumber = phoneNumber,
+                    EmailConfirmed = true
+                };
+                await userManager.CreateAsync(user, testUserPw);
+            }
+
+            if (user == null)
+            {
+                throw new Exception("The password is probably not strong enough!");
+            }
+
+            return user.Id;
+        }
+
+        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider,
+                                                                      int uid, string role)
+        {
+            IdentityResult IR = null;
+            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            if (roleManager == null)
+            {
+                throw new Exception("roleManager null");
+            }
+
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                IR = await roleManager.CreateAsync(new IdentityRole(role));
+            }
+
+            var userManager = serviceProvider.GetService<UserManager<GroceriesUser>>();
+
+            var user = await userManager.FindByIdAsync(uid.ToString());
+
+            if (user == null)
+            {
+                throw new Exception("The testUserPw password was probably not strong enough!");
+            }
+
+            IR = await userManager.AddToRoleAsync(user, role);
+
+            return IR;
         }
     }
 }
